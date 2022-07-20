@@ -1,0 +1,8 @@
+SCR_SpawnPoint : "{E7F4D5562F48DDE4}Prefabs/MP/Spawning/SpawnPoint_Base.et" {
+ coords 7477.46 7.089 6722.441
+ m_sFaction "US"
+ m_Info SCR_UIInfo "{56B4CC4ECACA2C37}" {
+  Name "Beanie Bobby"
+  Icon "{0D3F396D103BBFE4}UI/Textures/EditorPreviews/Auto/Props/Military/AmmoBoxes/EquipmentBoxStack/E_EquipmentBoxStack_US_01_V5.edds"
+ }
+}
