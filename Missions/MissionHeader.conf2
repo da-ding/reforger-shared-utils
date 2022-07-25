@@ -1,0 +1,10 @@
+SCR_MissionHeader {
+ World "{5FD5EEE26210E811}Worlds/BaseWorld.ent"
+ m_sName "Da-ding's shared utils!"
+ m_sAuthor "Da-ding!"
+ m_sPath "Missions/MissionHeader.conf"
+ m_sDescription "A base set of libraries and templates"
+ m_sIcon "{5F8A26173B1E0FF0}Images/Da-dings shared utils small.edds"
+ m_sLoadingScreen "{5F8A26173B1E0FF0}Images/Da-dings shared utils small.edds"
+ m_sPreviewImage "{5F8A26173B1E0FF0}Images/Da-dings shared utils small.edds"
+}

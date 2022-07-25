@@ -1,0 +1,9 @@
+GameProject {
+ ID "Base Gamemode"
+ GUID "59CA960A4388AA84"
+ TITLE "Base Gamemode"
+ DESCRIPTION "An initial test with some basic entities that we might want."
+ Dependencies {
+  "5614BBCCBB55ED1C" "58D0FB3206B6F859"
+ }
+}
