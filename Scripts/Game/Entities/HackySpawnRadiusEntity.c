@@ -25,14 +25,6 @@ class DAD_SpawnRadiusEntity: ScriptedGameTriggerEntity
 	{
 		super.OnActivate(ent);
 		SpawnHelpers.SpawnPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_bRandomChoose);
-		ent.Update();
-		
-		//Resource res = Resource.Load("{7A4A0A8283210784}Prefabs/Compositions/Misc/SubCompositions/TableMilitary_Cluttered_US_01.et");
-		Resource res = Resource.Load("{53506DCB398C7EBE}Prefabs/Props/Furniture/Table_01.et");
-		/* IEntity entity = SpawnHelpers.SpawnEntity(res, this.GetOrigin()); */
-		IEntity entity = SpawnHelpers.SpawnRandomInRadius(res, this.GetOrigin(), this.GetSphereRadius());
-		entity.Update();
-		ent.Update();
 	}
 	
 

@@ -9,11 +9,9 @@ class SpawnHelpers {
 			return null;
 		}
 		
-		
 		EntitySpawnParams params = EntitySpawnParams();
 		params.TransformMode = ETransformMode.WORLD;
 		params.Transform[3] = spawnPos;
-		
 		IEntity entity = GetGame().SpawnEntityPrefab(resource, null, params);
 		
 		if (!entity)
@@ -22,7 +20,6 @@ class SpawnHelpers {
 			return null;
 		}
 		
-		//entity.SetOrigin(spawnPos);
 		entity.Update();
 		return entity;
 	}
@@ -62,14 +59,13 @@ class SpawnHelpers {
 		return entities;
 	}
 	
-	/* static array<IEntity> SpawnPoolInRadius(array<ref Resource> entities, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true) */
 	static void SpawnPoolInRadius(array<ref Resource> entities, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
 	{
 		array<ref Resource> resources = RefArrayUtils<ref Resource>.Choose(spawnCount, entities, randomChoose);
 		foreach (Resource res : resources)
 		{
-			IEntity e = SpawnRandomInRadius(res, spawnOrigin, radius);
-			e.Update();
+			IEntity ent = SpawnRandomInRadius(res, spawnOrigin, radius);
+			ent.Update();
 		}
 	}
 	
@@ -94,8 +90,8 @@ class SpawnHelpers {
 			Resource res = Resource.Load(name);
 			IEntity table = SpawnRandomInRadius(lootbox, spawnOrigin, radius);
 			table.Update();
-			/* IEntity entity = SpawnEntity(res, table.GetOrigin()); */
-			/* entity.Update(); */
+			IEntity entity = SpawnEntity(res, table.GetOrigin());
+			entity.Update();
 		}
 	}
 }
