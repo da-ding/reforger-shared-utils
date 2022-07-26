@@ -7,6 +7,9 @@ class DAD_SpawnRadiusEntity: ScriptedGameTriggerEntity
 {
 	static ref RandomGenerator RNG = new RandomGenerator();
 
+	protected ref array<IEntity> m_Entities;
+	array<IEntity> GetEntities() return m_Entities; 
+
 	[Attribute(uiwidget: UIWidgets.ResourceAssignArray, desc: "List of Entities to Spawn from", params: "et", category: "Spawn Options")]
 	ref array<ResourceName> m_aEntitySpawnSlots;
 	
@@ -24,7 +27,7 @@ class DAD_SpawnRadiusEntity: ScriptedGameTriggerEntity
 	override void OnActivate(IEntity ent)
 	{
 		super.OnActivate(ent);
-		SpawnHelpers.SpawnPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_bRandomChoose);
+		m_Entities = SpawnHelpers.SpawnPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_bRandomChoose);
 	}
 	
 

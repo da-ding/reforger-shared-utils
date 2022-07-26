@@ -25,8 +25,8 @@ class SpawnHelpers {
 
 	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
 	{
-		const vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
-		const vector rotation = "0 1 0" * RNG.RandFloatXY(-180, 180);
+		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
+		vector rotation = "0 1 0" * RNG.RandFloatXY(-180, 180);
 
 		IEntity entity = SpawnEntity(resource, spawnPos, rotation);
 		if (!entity) return null;
@@ -63,7 +63,7 @@ class SpawnHelpers {
 	static array<IEntity> SpawnPoolInRadius(array<ref Resource> entities, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
 	{
 		array<ref Resource> resources = RefArrayUtils<ref Resource>.Choose(spawnCount, entities, randomChoose);
-		auto result = new array<IEntity>();
+		array<IEntity> result = new array<IEntity>();
 		result.Resize(spawnCount);
 
 		foreach (int i, Resource res : resources)
@@ -76,7 +76,9 @@ class SpawnHelpers {
 
 	static array<IEntity> SpawnPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
 	{
-		return SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
+		array<ref Resource> res = ToResources(entityNames);
+		array<IEntity> entities = SpawnPoolInRadius(res, spawnCount, spawnOrigin, radius, randomChoose);
+		return entities;
 	}
 
 	static array<IEntity> SpawnPoolInRadius(array<string> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
