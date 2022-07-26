@@ -1,37 +1,38 @@
 class SpawnHelpers {
 	static ref RandomGenerator RNG = new RandomGenerator();
 
-	static IEntity SpawnEntity(Resource resource, vector spawnPos)
-	{		
+	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector rotation = "0 0 0")
+	{
 		if (!resource)
 		{
 			Print("No resource given.", LogLevel.WARNING);
 			return null;
 		}
-		
-		EntitySpawnParams params = EntitySpawnParams();
-		params.TransformMode = ETransformMode.WORLD;
-		params.Transform[3] = spawnPos;
-		IEntity entity = GetGame().SpawnEntityPrefab(resource, null, params);
-		
+
+		IEntity entity = GetGame().SpawnEntityPrefab(resource);
 		if (!entity)
 		{
 			Print("Error: Could not create entity", LogLevel.WARNING);
 			return null;
 		}
-		
+
+		entity.SetOrigin(spawnPos);
+		entity.SetAngles(rotation);
+
 		entity.Update();
 		return entity;
 	}
 
 	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
 	{
-		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
+		const vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
+		const vector rotation = "0 1 0" * RNG.RandFloatXY(-180, 180);
 
-		IEntity entity = SpawnEntity(resource, spawnPos);		
+		IEntity entity = SpawnEntity(resource, spawnPos, rotation);
 		if (!entity) return null;
 
-		GenericHelpers.SnapAndOrientToTerrain(entity);	
+		GenericHelpers.SnapAndOrientToTerrain(entity);
+		entity.Update();
 		return entity;
 	}
 
@@ -58,27 +59,31 @@ class SpawnHelpers {
 
 		return entities;
 	}
-	
-	static void SpawnPoolInRadius(array<ref Resource> entities, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
+
+	static array<IEntity> SpawnPoolInRadius(array<ref Resource> entities, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
 	{
 		array<ref Resource> resources = RefArrayUtils<ref Resource>.Choose(spawnCount, entities, randomChoose);
-		foreach (Resource res : resources)
+		auto result = new array<IEntity>();
+		result.Resize(spawnCount);
+
+		foreach (int i, Resource res : resources)
 		{
 			IEntity ent = SpawnRandomInRadius(res, spawnOrigin, radius);
-			ent.Update();
+			result.Set(i, ent);
 		}
-	}
-	
-	static void SpawnPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
-	{
-		SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
+		return result;
 	}
 
-	static void SpawnPoolInRadius(array<string> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
+	static array<IEntity> SpawnPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
 	{
-		SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
+		return SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
 	}
-		
+
+	static array<IEntity> SpawnPoolInRadius(array<string> entityNames, int spawnCount, vector spawnOrigin, float radius, bool randomChoose = true)
+	{
+		return SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
+	}
+
 	static void SpawnLootboxPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius, ResourceName lootboxName, bool randomChoose = true)
 	{
 		Resource lootbox = Resource.Load(lootboxName);
@@ -89,9 +94,7 @@ class SpawnHelpers {
 		{
 			Resource res = Resource.Load(name);
 			IEntity table = SpawnRandomInRadius(lootbox, spawnOrigin, radius);
-			table.Update();
 			IEntity entity = SpawnEntity(res, table.GetOrigin());
-			entity.Update();
 		}
 	}
 }
