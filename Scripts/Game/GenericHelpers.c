@@ -18,4 +18,24 @@ class GenericHelpers
 		entity.SetTransform(transform);
 	}
 	
+	static void FactionWin(Faction faction)
+	{
+		int factionIndex = GetGame().GetFactionManager().GetFactionIndex(faction);
+		
+		auto gameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
+		gameMode.EndGameMode(
+				SCR_GameModeEndData.CreateSimple(SCR_GameModeEndData.ENDREASON_EDITOR_FACTION_VICTORY, -1, factionIndex)
+		);
+	}
+
+	static IEntity GetVehicle(IEntity entity)
+	{
+		if (!entity) return null;
+		auto compartmentAccessTarget = SCR_CompartmentAccessComponent.Cast(entity.FindComponent(SCR_CompartmentAccessComponent));
+		if (compartmentAccessTarget)
+		{
+			return compartmentAccessTarget.GetVehicle();
+		}
+		return null;
+	}
 }
