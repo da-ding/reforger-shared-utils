@@ -4,7 +4,7 @@ class DAD_NotPlayerSpawnPointClass: SCR_SpawnPointClass
 };
 
 /*!
- * A generic version of PlayerSpawnPointClass for any object kind
+ * A generic version of PlayerSpawnPointClass for any entity kind
  */
 class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 {
@@ -16,12 +16,10 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 	
 	[RplProp(onRplName: "OnSetEntityID")]
 	protected string m_sEntityID;
-	
-	/* protected Faction m_CachedFaction; */
+
 	protected IEntity m_TargetEntity;
 	
-	//------------------------------------------------------------------------------------------------
-	IEntity GetTargetPlayer()
+	IEntity GetTargetEntity()
 	{
 		return m_TargetEntity;
 	}
@@ -35,20 +33,15 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 	{
 		if (entityID == m_sEntityID || !Replication.IsServer())
 			return;
-		
+
 		//--- Set and broadcast new entity ID
 		m_sEntityID = entityID;
 		OnSetEntityID();
 		Replication.BumpMe();
-		
-		//--- Assign player faction only when player entity exists
-		/* SCR_BaseGameMode gameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode()); */
-		/* gameMode.GetOnEntitySpawned().Insert(OnEntitySpawn); */
-		/* gameMode.GetOnPlayerKilled().Insert(OnEntityDeleted); */
-		/* gameMode.GetOnPlayerDeleted().Insert(OnEntityDeleted); */
-		
+
+
 		IEntity entity = GetGame().GetWorld().FindEntityByName(m_sEntityID);
-		/* RplComponent rplC = RplComponent.Cast(entity.FindComponent(RplComponent)); */
+		// TODO: Set listener to auto-update when entity is deleted from world
 		if (entity)
 			OnEntitySpawn(m_sEntityID, entity);
 		else
@@ -70,8 +63,6 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 		//--- Link player info
 		if (!m_EntityInfo)
 			m_EntityInfo = SCR_UIInfo.CreateInfo(name);
-		
-		//m_EntityInfo.SetEntityID(m_sEntityID);
 		LinkInfo(m_EntityInfo);
 	}
 	
@@ -79,11 +70,8 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 	{
 		if (entityID != m_sEntityID)
 			return;
-		
-		SCR_RespawnSystemComponent respawnSystem = SCR_RespawnSystemComponent.GetInstance();
-		/* m_CachedFaction = respawnSystem.GetPlayerFaction(m_sEntityID); */
-		m_TargetEntity = entity;
-		
+
+		m_TargetEntity = entity;	
 		ActivateSpawnPoint();
 	}
 
@@ -93,15 +81,11 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 			return;
 		
 		DeactivateSpawnPoint();
-		
-		/* m_CachedFaction = null; */
 		m_TargetEntity = null;
 	}
 
 	protected void ActivateSpawnPoint()
 	{
-		/* SetFactionKey(m_CachedFaction); */
-		
 		//--- Periodically refresh spawn's position
 		//--- Clients cannot access another player's entity directly, because it may not be streamed for them
 		ClearFlags(EntityFlags.STATIC, false);
@@ -110,6 +94,7 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 
 	protected void DeactivateSpawnPoint()
 	{
+		//TODO: I think they're using the faction key as the deactivation event?
 		/* SetFactionKey(null); */
 		
 		//--- Stop periodic refresh
@@ -161,13 +146,6 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 	}
 	void ~DAD_NotPlayerSpawnPoint()
 	{
-		/* SCR_BaseGameMode gameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode()); */
-		/* if (gameMode) */
-		/* { */
-		/* 	gameMode.GetOnPlayerSpawned().Remove(OnEntitySpawn); */
-		/* 	gameMode.GetOnPlayerKilled().Remove(OnEntityDeleted); */
-		/* 	gameMode.GetOnPlayerDeleted().Remove(OnEntityDeleted); */
-		/* } */
 		GetGame().GetCallqueue().Remove(UpdateSpawnPos);
 	}
 };
