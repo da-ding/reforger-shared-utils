@@ -1,0 +1,9 @@
+DAD_GroupSpawnPoint : "{5A2220DD0C16958B}Prefabs/MP/Spawning/SpawnPoint_US.et" {
+ ID "544EB04DCBFBD126"
+ m_fSpawnRadius 3
+ m_fNoPlayerRadius 0
+ m_fNoSightRadius 0
+ m_Info SCR_UIInfo "{56B4CC4ECACA2C37}" {
+  Name ""
+ }
+}

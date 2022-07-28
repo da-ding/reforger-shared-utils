@@ -18,7 +18,6 @@ class RefArrayUtils<ref Class T> {
 		int count = pool.Count();
 		for (int iResult = 0, iPool = 0; iResult < n; iResult++)
 		{
-			++iPool;
 			if (iPool >= count) iPool = 0;
 
 			ref T chosen;
@@ -26,6 +25,7 @@ class RefArrayUtils<ref Class T> {
 			else        chosen = pool[iPool];			
 
 			result.Set(iResult, chosen);
+			iPool++;
 		}
 	}
 }
@@ -50,7 +50,6 @@ class ArrayUtils<Class T> {
 		int count = pool.Count();
 		for (int iResult = 0, iPool = 0; iResult < n; iResult++)
 		{
-			++iPool;
 			if (iPool >= count) iPool = 0;
 
 			T chosen;
@@ -58,6 +57,7 @@ class ArrayUtils<Class T> {
 			else        chosen = pool[iPool];			
 
 			result.Set(iResult, chosen);
+			++iPool;
 		}
 	}
 }

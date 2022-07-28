@@ -1,0 +1,48 @@
+SCR_ChimeraCharacter : "{2F912ED6E399FF47}Prefabs/Characters/Factions/BLUFOR/US_Army/Character_US_Unarmed.et" {
+ ID "520EC961A090BBD5"
+ components {
+  AIControlComponent "{520EA1D2DB109F34}" {
+   components {
+    PerceptionComponent "{54A2CBC75F06064B}" {
+     SensorsList {
+      EarsSensor "{520EA1D2DB109AA9}" {
+       HearingDistance 50
+      }
+     }
+    }
+   }
+  }
+  BaseWeaponManagerComponent "{520EA1D2F659CE5D}" {
+   DefaultWeaponIndex 2
+  }
+  CharacterWeaponSlotComponent "{520EA1D2F659CFDC}" {
+   WeaponTemplate "{1353C6EAD1DCFE43}Prefabs/Weapons/Handguns/M9/Handgun_M9.et"
+   HolsteredHidden 0
+  }
+  BaseLoadoutManagerComponent "{520EA1D2DB11821E}" {
+   Slots {
+    LoadoutSlotInfo Hat {
+     Enabled 0
+    }
+   }
+  }
+  SCR_InventoryStorageManagerComponent "{520EA1D2DB118DE5}" {
+   InitialInventoryItems {
+    ItemsInitConfigurationItem "{54A49B42D138207E}" {
+     PrefabsToSpawn {
+     }
+    }
+    ItemsInitConfigurationItem "{56607B916E51CA58}" {
+     PrefabsToSpawn {
+      "{13772C903CB5E4F7}Prefabs/Items/Equipment/Maps/PaperMap_01_folded.et" "{73950FBA2D7DB5C5}Prefabs/Items/Equipment/Radios/Radio_ANPRC68.et"
+     }
+    }
+    ItemsInitConfigurationItem "{5888DEA7DB245B42}" {
+     PrefabsToSpawn {
+     }
+    }
+   }
+  }
+ }
+ coords 10946.194 23.693 11478.222
+}
