@@ -1,9 +1,9 @@
 [EntityEditorProps(category: "GameScripted/GameMode", description: "Spawn point entity", visible: false)]
-class DAD_GroupSpawnPointClass : DAD_NotPlayerSpawnPointClass
+class DAD_GroupSpawnPointClass : DAD_EntitySpawnPointClass
 {
 };
 
-class DAD_GroupSpawnPoint : DAD_NotPlayerSpawnPoint
+class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 {
 	void SetGroup(SCR_AIGroup group)
 	{

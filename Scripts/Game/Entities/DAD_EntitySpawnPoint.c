@@ -1,12 +1,12 @@
 [EntityEditorProps(category: "GameScripted/GameMode", description: "")]
-class DAD_NotPlayerSpawnPointClass: SCR_SpawnPointClass
+class DAD_EntitySpawnPointClass: SCR_SpawnPointClass
 {
 };
 
 /*!
  * A generic version of PlayerSpawnPointClass for any entity kind
  */
-class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
+class DAD_EntitySpawnPoint: SCR_SpawnPoint
 {
 	[Attribute("1", desc: "How often will the spawn's position be updated (in seconds).", category: "Entity Spawn Point")]
 	protected float m_fUpdateInterval;
@@ -18,10 +18,18 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 	protected string m_sEntityID;
 
 	protected IEntity m_TargetEntity;
+
+	protected bool m_bActivated = false;
 	
 	IEntity GetTargetEntity()
 	{
 		return m_TargetEntity;
+	}
+
+	override string GetFactionKey()
+	{
+		if (!m_bActivated) return string.Empty;
+		return super.GetFactionKey();
 	}
 	
 	/*!
@@ -86,6 +94,7 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 
 	protected void ActivateSpawnPoint()
 	{
+		m_bActivated = true;
 		//--- Periodically refresh spawn's position
 		//--- Clients cannot access another player's entity directly, because it may not be streamed for them
 		ClearFlags(EntityFlags.STATIC, false);
@@ -94,9 +103,7 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 
 	protected void DeactivateSpawnPoint()
 	{
-		//TODO: I think they're using the faction key as the deactivation event?
-		/* SetFactionKey(null); */
-		
+		m_bActivated = false;
 		//--- Stop periodic refresh
 		SetFlags(EntityFlags.STATIC, false);
 		GetGame().GetCallqueue().Remove(UpdateSpawnPos);
@@ -144,7 +151,7 @@ class DAD_NotPlayerSpawnPoint: SCR_SpawnPoint
 			GetGame().GetCallqueue().CallLater(compartmentAccessPlayer.MoveInVehicleAny, 1, false, vehicle); //--- Wait for character ownership to be transferred to client
 		}
 	}
-	void ~DAD_NotPlayerSpawnPoint()
+	void ~DAD_EntitySpawnPoint()
 	{
 		GetGame().GetCallqueue().Remove(UpdateSpawnPos);
 	}
