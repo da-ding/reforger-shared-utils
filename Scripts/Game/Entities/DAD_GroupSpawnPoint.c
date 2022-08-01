@@ -10,7 +10,7 @@ class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 		SCR_AIGroup oldGroup = SCR_AIGroup.Cast(GetTargetEntity());
 		if (oldGroup) oldGroup.GetOnEmpty().Remove(OnGroupEmpty);
 
-		SetEntityID(group.GetName());
+		SetEntity(group);
 		group.GetOnEmpty().Insert(OnGroupEmpty);
 	}
 

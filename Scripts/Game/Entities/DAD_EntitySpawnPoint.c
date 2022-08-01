@@ -15,11 +15,11 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	protected ref SCR_UIInfo m_EntityInfo;
 	
 	[RplProp(onRplName: "OnSetEntityID")]
-	protected string m_sEntityID;
+	protected RplId m_EntityID;
 
 	protected IEntity m_TargetEntity;
 
-	protected bool m_bActivated = false;
+	protected bool m_bActivated = true;
 	
 	IEntity GetTargetEntity()
 	{
@@ -37,55 +37,63 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	The Spawn will then activate and follow the position of the entity
 	\param entityID Target entity ID
 	*/
-	void SetEntityID(string entityID)
+	void SetEntityID(RplId entityID)
 	{
-		if (entityID == m_sEntityID || !Replication.IsServer())
+		if (entityID == m_EntityID || !Replication.IsServer())
 			return;
 
 		//--- Set and broadcast new entity ID
-		m_sEntityID = entityID;
+		m_EntityID = entityID;
 		OnSetEntityID();
 		Replication.BumpMe();
 
-
-		IEntity entity = GetGame().GetWorld().FindEntityByName(m_sEntityID);
+		RplComponent rplC = RplComponent.Cast(Replication.FindItem(m_EntityID));
+		IEntity entity = rplC.GetEntity();
+		//IEntity entity = GetGame().GetWorld().FindEntityByName(m_EntityID);
 		// TODO: Set listener to auto-update when entity is deleted from world
 		if (entity)
-			OnEntitySpawn(m_sEntityID, entity);
+			OnEntitySpawn(m_EntityID, entity);
 		else
-			OnEntityDeleted(m_sEntityID, null);
+			OnEntityDeleted(m_EntityID, null);
+	}
+	
+	void SetEntity(IEntity entity)
+	{
+		RplComponent rplC = RplComponent.Cast(entity.FindComponent(RplComponent));
+		RplId id = rplC.Id();
+		SetEntityID(id);
 	}
 
 	/*!
 	Get ID of the player this spawn point is assigned to.
 	\return Target entity ID
 	*/
-	string GetEntityID()
+	RplId GetEntityID()
 	{
-		return m_sEntityID;
+		return m_EntityID;
 	}
 	
 	protected void OnSetEntityID()
 	{
-		LocalizedString name = m_sEntityID;
+		LocalizedString name = m_EntityID.ToString();
 		//--- Link player info
 		if (!m_EntityInfo)
 			m_EntityInfo = SCR_UIInfo.CreateInfo(name);
 		LinkInfo(m_EntityInfo);
 	}
 	
-	protected void OnEntitySpawn(string entityID, IEntity entity)
+	protected void OnEntitySpawn(RplId entityID, IEntity entity)
 	{
-		if (entityID != m_sEntityID)
+		if (entityID != m_EntityID)
 			return;
 
 		m_TargetEntity = entity;	
 		ActivateSpawnPoint();
 	}
 
-	protected void OnEntityDeleted(string entityID, IEntity entity)
+	protected void OnEntityDeleted(RplId entityID, IEntity entity)
 	{
-		if (entityID != m_sEntityID)
+		if (entityID != m_EntityID)
 			return;
 		
 		DeactivateSpawnPoint();
