@@ -22,7 +22,7 @@ class SpawnHelpers {
 
 		if (!entity)
 		{
-			Print("Error: Could not create entity", LogLevel.WARNING);
+			Print("Error: Could not create entity for " + resource, LogLevel.ERROR);
 			return null;
 		}
 
@@ -32,12 +32,11 @@ class SpawnHelpers {
 		if (rplComponent)
 		{
 			Print("Replication is" + rplComponent);
-			rplComponent.EnableStreaming(true);
 			rplComponent.InsertToReplication();
 		}
 		else
 		{
-			Print("No replication for Resource '" + resource + "' Entity " + entity);
+			Print("No replication for Resource '" + resource + "' Entity " + entity, LogLevel.WARNING);
 		}
 
 		return entity;
