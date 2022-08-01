@@ -1,7 +1,7 @@
 class SpawnHelpers {
 	static ref RandomGenerator RNG = new RandomGenerator();
 
-	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector rotation = "0 0 0")
+	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector rotation = "0 0 0", IEntity parent = null)
 	{
 		if (!resource)
 		{
@@ -9,15 +9,25 @@ class SpawnHelpers {
 			return null;
 		}
 
-		IEntity entity = GetGame().SpawnEntityPrefab(resource);
+		EntitySpawnParams params = new EntitySpawnParams();
+
+		params.TransformMode = ETransformMode.WORLD;
+		Math3D.AnglesToMatrix(rotation, params.Transform);
+		params.Transform[3] = spawnPos;
+
+		if (parent)
+			params.Parent = parent;
+
+		IEntity entity = GetGame().SpawnEntityPrefab(resource, null, params);
+
 		if (!entity)
 		{
 			Print("Error: Could not create entity", LogLevel.WARNING);
 			return null;
 		}
 
-		entity.SetOrigin(spawnPos);
-		entity.SetAngles(rotation);
+		//entity.SetOrigin(spawnPos);
+		//entity.SetAngles(rotation);
 
 		entity.Update();
 		return entity;
