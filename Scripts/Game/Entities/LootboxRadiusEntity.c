@@ -11,7 +11,7 @@ class DAD_LootboxRadiusEntity: DAD_SpawnRadiusEntity
 
 	override void OnActivate(IEntity ent)
 	{
-		SpawnHelpers.SpawnLootboxPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_eLootbox, m_bRandomChoose);
+		SpawnHelpers.SpawnLootboxPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_eLootbox, m_bRandomChoose, this);
 	}
 	
 

@@ -27,15 +27,28 @@ class SpawnHelpers {
 		}
 
 		entity.Update();
+
+		RplComponent rplComponent = RplComponent.Cast(entity.FindComponent(RplComponent));
+		if (rplComponent)
+		{
+			Print("Replication is" + rplComponent);
+			rplComponent.EnableStreaming(true);
+			rplComponent.InsertToReplication();
+		}
+		else
+		{
+			Print("No replication for Resource '" + resource + "' Entity " + entity);
+		}
+
 		return entity;
 	}
 
-	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
+	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius, IEntity parent = null)
 	{
 		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
 		vector yawPitchRoll = "1 0 0" * RNG.RandFloatXY(-180, 180);
 
-		IEntity entity = SpawnEntity(resource, spawnPos, yawPitchRoll);
+		IEntity entity = SpawnEntity(resource, spawnPos, yawPitchRoll, parent);
 		if (!entity) return null;
 
 		GenericHelpers.SnapAndOrientToTerrain(entity);
@@ -93,7 +106,8 @@ class SpawnHelpers {
 		return SpawnPoolInRadius(ToResources(entityNames), spawnCount, spawnOrigin, radius, randomChoose);
 	}
 
-	static void SpawnLootboxPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius, ResourceName lootboxName, bool randomChoose = true)
+	static void SpawnLootboxPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius,
+										 ResourceName lootboxName, bool randomChoose = true, IEntity parent = null)
 	{
 		Resource lootbox = Resource.Load(lootboxName);
 		if (!lootbox) Print("Error: no lootbox value provided");
@@ -102,8 +116,11 @@ class SpawnHelpers {
 		foreach (ResourceName name : resources)
 		{
 			Resource res = Resource.Load(name);
-			IEntity table = SpawnRandomInRadius(lootbox, spawnOrigin, radius);
+			IEntity table = SpawnRandomInRadius(lootbox, spawnOrigin, radius, parent);
+			table.Update();
+
 			IEntity entity = SpawnEntity(res, table.GetOrigin());
+			entity.Update();
 		}
 	}
 }
