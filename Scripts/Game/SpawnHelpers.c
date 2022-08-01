@@ -26,9 +26,6 @@ class SpawnHelpers {
 			return null;
 		}
 
-		//entity.SetOrigin(spawnPos);
-		//entity.SetAngles(rotation);
-
 		entity.Update();
 		return entity;
 	}
@@ -36,9 +33,9 @@ class SpawnHelpers {
 	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
 	{
 		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
-		vector rotation = "0 1 0" * RNG.RandFloatXY(-180, 180);
+		vector yawPitchRoll = "1 0 0" * RNG.RandFloatXY(-180, 180);
 
-		IEntity entity = SpawnEntity(resource, spawnPos, rotation);
+		IEntity entity = SpawnEntity(resource, spawnPos, yawPitchRoll);
 		if (!entity) return null;
 
 		GenericHelpers.SnapAndOrientToTerrain(entity);
