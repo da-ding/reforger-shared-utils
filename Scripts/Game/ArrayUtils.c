@@ -9,7 +9,7 @@ class RefArrayUtils<ref Class T> {
 	{
 		array<ref T> result = new array<ref T>();
 		result.Resize(n);
-		Choose(n, pool, result);
+		Choose(n, pool, result, random);
 		return result;
 	}
 
