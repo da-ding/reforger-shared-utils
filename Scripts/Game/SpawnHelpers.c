@@ -29,36 +29,14 @@ class SpawnHelpers {
 		}
 
 		entity.Update();
-
-		GetGame().GetCallqueue().CallLater(UpdateRpl, 800, false, entity, resourceName);
-
-		return entity;
-	}
-
-	static void UpdateRpl(IEntity entity, ResourceName resourceName = "")
-	{
+		
 		RplComponent rplComponent = RplComponent.Cast(entity.FindComponent(RplComponent));
 		if (rplComponent)
-		{
 			Print("Replication is" + rplComponent + " for " + resourceName, LogLevel.DEBUG);
-			//rplComponent.Activate(entity);
-			rplComponent.EnableStreaming(false);
-			/* RplSchedulerInsertionCtx ctx(); */
-			/* ctx.StateOverride = ERplStateOverride.Dynamic; */
-			/* ctx.StateOverride = ERplStateOverride.None; */
-			rplComponent.InsertToReplication(null);
-		}
 		else
-		{
 			Print("No replication for Resource '" + resourceName + "' Entity " + entity, LogLevel.WARNING);
-			//array<Managed> arr();
-			//entity.FindComponents(GenericComponent, arr);
-			//Print(arr.Debug());
-			//SCR_EntityHelper.DeleteEntityAndChildren(entity);
-			//ref RplComponent rplC = new RplComponent();
-			//rplComponent.Activate(entity);
-			//rplComponent.InsertToReplication();
-		}
+
+		return entity;
 	}
 
 	static void AddRplComponent(Resource resource)

@@ -27,13 +27,9 @@ class DAD_SpawnRadiusEntity: ScriptedGameTriggerEntity
 	override void OnActivate(IEntity ent)
 	{
 		super.OnActivate(ent);
-
-		RplComponent rplC = RplComponent.Cast(this.FindComponent(RplComponent));
-		if ((rplC && !rplC.IsOwner()) || !Replication.IsServer())
-			return;
+		if (!Replication.IsServer()) return;
 
 		m_Entities = SpawnHelpers.SpawnPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_bRandomChoose);
-		Replication.BumpMe();
 	}
 
 

@@ -11,10 +11,7 @@ class DAD_LootboxRadiusEntity: DAD_SpawnRadiusEntity
 
 	override void OnActivate(IEntity ent)
 	{
-
-		RplComponent rplC = RplComponent.Cast(this.FindComponent(RplComponent));
-		if ((rplC && !rplC.IsOwner()) || !Replication.IsServer())
-			return;
+		if (!Replication.IsServer()) return;
 
 		SpawnHelpers.SpawnLootboxPoolInRadius(m_aEntitySpawnSlots, m_fSpawnCount, this.GetOrigin(), this.GetSphereRadius(), m_eLootbox, m_bRandomChoose);
 	}
