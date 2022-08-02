@@ -1,27 +1,27 @@
 class GenericHelpers
-{	
+{
 	static void SnapToTerrain(IEntity entity)
 	{
 		vector transform[4];
 		entity.GetTransform(transform);
-		
+
 		SCR_TerrainHelper.SnapToTerrain(transform);
 		entity.SetTransform(transform);
 	}
-	
+
 	static void SnapAndOrientToTerrain(IEntity entity)
 	{
 		vector transform[4];
 		entity.GetTransform(transform);
-		
+
 		SCR_TerrainHelper.SnapAndOrientToTerrain(transform);
 		entity.SetTransform(transform);
 	}
-	
+
 	static void FactionWin(Faction faction)
 	{
 		int factionIndex = GetGame().GetFactionManager().GetFactionIndex(faction);
-		
+
 		auto gameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		gameMode.EndGameMode(
 				SCR_GameModeEndData.CreateSimple(SCR_GameModeEndData.ENDREASON_EDITOR_FACTION_VICTORY, -1, factionIndex)

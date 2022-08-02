@@ -22,7 +22,7 @@ class RefArrayUtils<ref Class T> {
 
 			ref T chosen;
 			if (random) chosen = pool.GetRandomElement();
-			else        chosen = pool[iPool];			
+			else        chosen = pool[iPool];
 
 			result.Set(iResult, chosen);
 			iPool++;
@@ -54,7 +54,7 @@ class ArrayUtils<Class T> {
 
 			T chosen;
 			if (random) chosen = pool.GetRandomElement();
-			else        chosen = pool[iPool];			
+			else        chosen = pool[iPool];
 
 			result.Set(iResult, chosen);
 			++iPool;

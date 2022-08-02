@@ -18,12 +18,12 @@ class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 	{
 		return SCR_AIGroup.Cast(m_TargetEntity);
 	}
-	
+
 	void OnGroupEmpty()
 	{
 		OnEntityDeleted(GetEntityID(), m_TargetEntity);
 	}
-	
+
 	override void EOnPlayerSpawn(IEntity entity)
 	{
 		super.EOnPlayerSpawn(entity);
@@ -35,7 +35,7 @@ class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 		group.GetAgents(agents);
 		int last = agents.Count() - 1;
 		IEntity ai = agents.Get(last).GetControlledEntity();
-		
+
 		SCR_EntityHelper.DeleteEntityAndChildren(ai);
 		group.RemoveAIEntityFromGroup(ai);
 

@@ -10,17 +10,17 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 {
 	[Attribute("1", desc: "How often will the spawn's position be updated (in seconds).", category: "Entity Spawn Point")]
 	protected float m_fUpdateInterval;
-	
+
 	[Attribute(desc: "Spawn point visualization. Original 'Info' attribute will be ignored.", category: "Entity Spawn Point")]
 	protected ref SCR_UIInfo m_EntityInfo;
-	
-	[RplProp(onRplName: "OnSetEntityID")]
+
+	/* [RplProp(onRplName: "OnSetEntityID")] */
 	protected RplId m_EntityID;
 
 	protected IEntity m_TargetEntity;
 
 	protected bool m_bActivated = true;
-	
+
 	IEntity GetTargetEntity()
 	{
 		return m_TargetEntity;
@@ -31,7 +31,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		if (!m_bActivated) return string.Empty;
 		return super.GetFactionKey();
 	}
-	
+
 	/*!
 	Assign entity ID to this respawn point.
 	The Spawn will then activate and follow the position of the entity
@@ -56,7 +56,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		else
 			OnEntityDeleted(m_EntityID, null);
 	}
-	
+
 	void SetEntity(IEntity entity)
 	{
 		RplComponent rplC = RplComponent.Cast(entity.FindComponent(RplComponent));
@@ -72,7 +72,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	{
 		return m_EntityID;
 	}
-	
+
 	protected void OnSetEntityID()
 	{
 		LocalizedString name = m_EntityID.ToString();
@@ -81,13 +81,13 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 			m_EntityInfo = SCR_UIInfo.CreateInfo(name);
 		LinkInfo(m_EntityInfo);
 	}
-	
+
 	protected void OnEntitySpawn(RplId entityID, IEntity entity)
 	{
 		if (entityID != m_EntityID)
 			return;
 
-		m_TargetEntity = entity;	
+		m_TargetEntity = entity;
 		ActivateSpawnPoint();
 	}
 
@@ -95,7 +95,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	{
 		if (entityID != m_EntityID)
 			return;
-		
+
 		DeactivateSpawnPoint();
 		m_TargetEntity = null;
 	}
@@ -116,12 +116,12 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		SetFlags(EntityFlags.STATIC, false);
 		GetGame().GetCallqueue().Remove(UpdateSpawnPos);
 	}
-	
+
 	protected void UpdateSpawnPos()
 	{
 		if (!m_TargetEntity)
 			return;
-		
+
 		vector pos = m_TargetEntity.GetOrigin();
 		UpdateSpawnPosBroadcast(pos);
 		Rpc(UpdateSpawnPosBroadcast, pos);
@@ -132,11 +132,11 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	{
 		SetOrigin(pos);
 	}
-	
+
 	override void GetPositionAndRotation(out vector pos, out vector rot)
 	{
 		super.GetPositionAndRotation(pos, rot);
-		
+
 		if (m_TargetEntity)
 		{
 			IEntity vehicle  = GenericHelpers.GetVehicle(m_TargetEntity);

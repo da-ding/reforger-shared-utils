@@ -1,7 +1,7 @@
 class SpawnHelpers {
 	static ref RandomGenerator RNG = new RandomGenerator();
 
-	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector rotation = "0 0 0", IEntity parent = null)
+	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector yawPitchRoll = "0 0 0", IEntity parent = null)
 	{
 		if (!resource)
 		{
@@ -9,10 +9,12 @@ class SpawnHelpers {
 			return null;
 		}
 
+		ResourceName resourceName = resource.GetResource().GetResourceName();
+
 		EntitySpawnParams params = new EntitySpawnParams();
 
 		params.TransformMode = ETransformMode.WORLD;
-		Math3D.AnglesToMatrix(rotation, params.Transform);
+		Math3D.AnglesToMatrix(yawPitchRoll, params.Transform);
 		params.Transform[3] = spawnPos;
 
 		if (parent)
@@ -22,32 +24,72 @@ class SpawnHelpers {
 
 		if (!entity)
 		{
-			Print("Error: Could not create entity for " + resource, LogLevel.ERROR);
+			Print("Error: Could not create entity for " + resourceName, LogLevel.ERROR);
 			return null;
 		}
 
 		entity.Update();
 
-		RplComponent rplComponent = RplComponent.Cast(entity.FindComponent(RplComponent));
-		if (rplComponent)
-		{
-			Print("Replication is" + rplComponent);
-			rplComponent.InsertToReplication();
-		}
-		else
-		{
-			Print("No replication for Resource '" + resource + "' Entity " + entity, LogLevel.WARNING);
-		}
+		GetGame().GetCallqueue().CallLater(UpdateRpl, 800, false, entity, resourceName);
 
 		return entity;
 	}
 
-	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius, IEntity parent = null)
+	static void UpdateRpl(IEntity entity, ResourceName resourceName = "")
+	{
+		RplComponent rplComponent = RplComponent.Cast(entity.FindComponent(RplComponent));
+		if (rplComponent)
+		{
+			Print("Replication is" + rplComponent + " for " + resourceName, LogLevel.DEBUG);
+			//rplComponent.Activate(entity);
+			rplComponent.EnableStreaming(false);
+			/* RplSchedulerInsertionCtx ctx(); */
+			/* ctx.StateOverride = ERplStateOverride.Dynamic; */
+			/* ctx.StateOverride = ERplStateOverride.None; */
+			rplComponent.InsertToReplication(null);
+		}
+		else
+		{
+			Print("No replication for Resource '" + resourceName + "' Entity " + entity, LogLevel.WARNING);
+			//array<Managed> arr();
+			//entity.FindComponents(GenericComponent, arr);
+			//Print(arr.Debug());
+			//SCR_EntityHelper.DeleteEntityAndChildren(entity);
+			//ref RplComponent rplC = new RplComponent();
+			//rplComponent.Activate(entity);
+			//rplComponent.InsertToReplication();
+		}
+	}
+
+	static void AddRplComponent(Resource resource)
+	{
+		BaseContainer container = resource.GetResource().ToBaseContainer();
+		ref BaseContainerList componentList = container.GetObjectArray("components");
+		// TODO: Stub
+	}
+
+	static IEntity SpawnRandomInRadius(Resource resource, IEntity target, float radius, bool parent = false)
+	{
+		if (!parent) return SpawnRandomInRadius(resource, target.GetOrigin(), radius);
+
+		vector origin = "0 0 0";
+		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, "0 0 0");
+		vector yawPitchRoll = "1 0 0" * RNG.RandFloatXY(-180, 180);
+
+		IEntity result = SpawnEntity(resource, spawnPos, yawPitchRoll, target);
+		if (!result) return null;
+
+		GenericHelpers.SnapAndOrientToTerrain(result);
+		result.Update();
+		return result;
+	}
+
+	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
 	{
 		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
 		vector yawPitchRoll = "1 0 0" * RNG.RandFloatXY(-180, 180);
 
-		IEntity entity = SpawnEntity(resource, spawnPos, yawPitchRoll, parent);
+		IEntity entity = SpawnEntity(resource, spawnPos, yawPitchRoll);
 		if (!entity) return null;
 
 		GenericHelpers.SnapAndOrientToTerrain(entity);
@@ -106,7 +148,7 @@ class SpawnHelpers {
 	}
 
 	static void SpawnLootboxPoolInRadius(array<ResourceName> entityNames, int spawnCount, vector spawnOrigin, float radius,
-										 ResourceName lootboxName, bool randomChoose = true, IEntity parent = null)
+										 ResourceName lootboxName, bool randomChoose = true)
 	{
 		Resource lootbox = Resource.Load(lootboxName);
 		if (!lootbox) Print("Error: no lootbox value provided");
@@ -115,11 +157,13 @@ class SpawnHelpers {
 		foreach (ResourceName name : resources)
 		{
 			Resource res = Resource.Load(name);
-			IEntity table = SpawnRandomInRadius(lootbox, spawnOrigin, radius, parent);
-			table.Update();
+			IEntity entity, table;
 
-			IEntity entity = SpawnEntity(res, table.GetOrigin());
+			entity = SpawnRandomInRadius(res, spawnOrigin, radius);
 			entity.Update();
+
+			table = SpawnEntity(lootbox, entity.GetOrigin(), entity.GetYawPitchRoll());
+			table.Update();
 		}
 	}
 }
