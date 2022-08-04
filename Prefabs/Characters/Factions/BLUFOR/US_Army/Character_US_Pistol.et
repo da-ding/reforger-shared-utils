@@ -3,12 +3,18 @@ SCR_ChimeraCharacter : "{2F912ED6E399FF47}Prefabs/Characters/Factions/BLUFOR/US_
  components {
   AIControlComponent "{520EA1D2DB109F34}" {
    components {
+    AICharacterMovementComponent "{520EA1D2DB109F01}" {
+     ObstacleAvoidance 1
+    }
     PerceptionComponent "{54A2CBC75F06064B}" {
      SensorsList {
       EarsSensor "{520EA1D2DB109AA9}" {
        HearingDistance 50
       }
      }
+    }
+    SCR_AICombatComponent "{55A2C9BE343B2EA1}" {
+     m_eAISkillDefault EXPERT
     }
    }
   }
@@ -17,7 +23,6 @@ SCR_ChimeraCharacter : "{2F912ED6E399FF47}Prefabs/Characters/Factions/BLUFOR/US_
   }
   CharacterWeaponSlotComponent "{520EA1D2F659CFDC}" {
    WeaponTemplate "{1353C6EAD1DCFE43}Prefabs/Weapons/Handguns/M9/Handgun_M9.et"
-   HolsteredHidden 0
   }
   BaseLoadoutManagerComponent "{520EA1D2DB11821E}" {
    Slots {
