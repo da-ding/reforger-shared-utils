@@ -38,4 +38,11 @@ class GenericHelpers
 		}
 		return null;
 	}
+	
+	static IEntity GetEntity(RplId id)
+	{
+		RplComponent rplC = RplComponent.Cast(Replication.FindItem(id));
+		if (!rplC) return null;
+		return rplC.GetEntity();
+	}
 }
