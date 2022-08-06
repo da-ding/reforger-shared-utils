@@ -10,7 +10,7 @@ class DAD_BaseTriggerEntity: SCR_BaseTriggerEntity
 
 	override bool ScriptedEntityFilterForQuery(IEntity ent)
 	{
-		if (GetGame().GetWorld().GetWorldTime() < m_fInitialDelay) return false;
+		if (GetGame().GetWorld().GetWorldTime() < m_fInitialDelay * 1000) return false;
 		return DefaultEntityFilterForQuery(ent);
 	}
 
