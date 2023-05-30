@@ -24,7 +24,7 @@ class DAD_FactionControlTriggerEntity: DAD_BaseTriggerEntity
 		foreach (Faction f : factions)
 		{
 			m_mFactionCounts.Insert(f, 0);
-		} 
+		}
 	}
 
 	/*!
@@ -78,7 +78,7 @@ class DAD_FactionControlTriggerEntity: DAD_BaseTriggerEntity
 				}
 
 				float friendlyRatio = count / Math.Max(friendlyCount + enemyCount, 1);
-				PrintFormat("%1: %2 / %3", faction.GetFactionKey(), friendlyRatio, m_fFriendlyRatioLimit);
+				PrintFormat("DAD_FactionControlTriggerEntity: %1: %2 / %3", faction.GetFactionKey(), friendlyRatio, m_fFriendlyRatioLimit, LogLevel.VERBOSE);
 
 				bool triggered = false;
 				switch (m_iRatioMethod)
