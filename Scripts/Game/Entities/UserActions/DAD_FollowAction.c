@@ -5,17 +5,15 @@ class DAD_FollowAction : ScriptedUserAction {
 
 	const ResourceName m_WaypointType = "{A0509D3C4DD4475E}Prefabs/AI/Waypoints/AIWaypoint_Follow.et";
 	
-	AIControlComponent m_AIControlComp = null;
-
-
-	bool m_IsFollowing = false;
-
 	//------------------------------------------------------------------------------------------------
 	override void PerformAction(IEntity pOwnerEntity, IEntity pUserEntity)
 	{
 		RplComponent rplC = RplComponent.Cast(GetOwner().FindComponent(RplComponent));
-		rplC.InsertToReplication();
 		if (!rplC.IsOwner()) return;
+		
+		// TODO: We have to update all of the Group's children here with the isFollowing status, because GetActionNameScript
+		// only runs on the proxy/client/whatever
+		// Also, we probably want to do that automatically in the AIGroup whenever a Follow waypoint is set.
 
 		if (!m_FollowWaypoint)
 		{
@@ -26,8 +24,7 @@ class DAD_FollowAction : ScriptedUserAction {
 		AIControlComponent controlComp = AIControlComponent.Cast(pOwnerEntity.FindComponent(AIControlComponent));
 		AIGroup ai = controlComp.GetControlAIAgent().GetParentGroup();
 
-		CheckIsFollowing();
-		if (m_IsFollowing)
+		if (CheckIsFollowing())
 		{
 			ai.RemoveWaypointAt(0);
 			return;
@@ -42,8 +39,6 @@ class DAD_FollowAction : ScriptedUserAction {
 	//------------------------------------------------------------------------------------------------
 	override bool GetActionNameScript(out string outName)
 	{	
-		string readyText;
-		
 		if (CheckIsFollowing())
 			outName = "Stop from Following";
 		else
@@ -83,24 +78,60 @@ class DAD_FollowAction : ScriptedUserAction {
 		return ai;
 	}
 
+	//[RplRpc(RplChannel.Reliable, RplRcver.Server)]
 	bool CheckIsFollowing()
 	{
 		RplComponent rplC = RplComponent.Cast(GetOwner().FindComponent(RplComponent));
-		rplC.InsertToReplication();
 
-		if (!rplC.IsOwner()) return m_IsFollowing;
+		if (!rplC.IsOwner())
+		{
+			SCR_ChimeraCharacter owner = SCR_ChimeraCharacter.Cast(GetOwner());
+			return owner.GetIsFollowing();
+		}
 
 		AIGroup ai = GetAI();
 		AIWaypoint wp = ai.GetCurrentWaypoint();
 
+		bool isFollowing;
 		if (!wp)
 		{
-			m_IsFollowing = false;
-		 	return m_IsFollowing;
+			isFollowing = false;
+		}
+		else
+		{
+			auto prefab = wp.GetPrefabData();
+			isFollowing = prefab && prefab.GetPrefabName() == m_WaypointType;
 		}
 		
-		auto prefab = wp.GetPrefabData();
-		m_IsFollowing = prefab && prefab.GetPrefabName() == m_WaypointType;
-		return m_IsFollowing;
+		Print("Following is %1", isFollowing);
+		
+		if (!ai) return false;
+		array<AIAgent> agents = new array<AIAgent>();
+		ai.GetAgents(agents);
+		foreach (AIAgent agent : agents)
+		{
+			SCR_ChimeraCharacter char = SCR_ChimeraCharacter.Cast(agent.GetControlledEntity());
+			char.SetIsFollowing(isFollowing);
+		}
+		return isFollowing;
 	}
+	
+	/*
+	//! Before performing the action the caller can store some data in it which is delivered to others.
+	//! Only available for actions for which HasLocalEffectOnly returns false.
+	override event protected bool OnSaveActionData(ScriptBitWriter writer)
+	{
+		CheckIsFollowing();
+		writer.WriteBool(!m_IsFollowing);
+		return true;
+	}
+	//! If the one performing the action packed some data in it everybody receiving the action.
+	//! Only available for actions for which HasLocalEffectOnly returns false.
+	//! Only triggered if the sender wrote anyting to the buffer.
+	override event protected bool OnLoadActionData(ScriptBitReader reader)
+	{
+		reader.ReadBool(m_IsFollowing);
+		return true;
+	}
+	*/
 }

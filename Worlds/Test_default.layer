@@ -134,9 +134,16 @@ SCR_SpawnPoint : "{4FEA25583D0975F7}Prefabs/MP/Spawning/SpawnPoint_USSR.et" {
  coords 128 1 129
  angleY -180
 }
+GenericEntity : "{50A68300B537EDFA}Prefabs/Items/Food/ArmyCrackers_Soviet_01.et" {
+ coords 132.613 1.001 125.326
+ Flags 3
+}
 SCR_SpawnPoint : "{5A2220DD0C16958B}Prefabs/MP/Spawning/SpawnPoint_US.et" {
  coords 128 1 127
 }
 SCR_LoadoutManager LoadoutManager : "{97EF4C1A41F63DDB}Prefabs/MP/Managers/Loadouts/LoadoutManager_USxUSSR.et" {
  coords 0 0 0
+}
+GenericEntity : "{E712306EC1913041}Prefabs/Systems/Arsenal/AmmoBoxes/AmmoBoxArsenal_Ammunition_Base.et" {
+ coords 128.335 1.001 124.969
 }
