@@ -27,13 +27,15 @@ class DAD_FollowAction : ScriptedUserAction {
 		if (CheckIsFollowing())
 		{
 			ai.RemoveWaypointAt(0);
-			return;
 		}
+		else
+		{
+			m_FollowWaypoint.SetEntity(pUserEntity);
+			//m_FollowWaypoint.SetPriority(true);
 
-		m_FollowWaypoint.SetEntity(pUserEntity);
-		//m_FollowWaypoint.SetPriority(true);
-
-		ai.AddWaypointAt(m_FollowWaypoint, 0);
+			ai.AddWaypointAt(m_FollowWaypoint, 0);
+		}
+		CheckIsFollowing();
 	}
 
 	//------------------------------------------------------------------------------------------------
