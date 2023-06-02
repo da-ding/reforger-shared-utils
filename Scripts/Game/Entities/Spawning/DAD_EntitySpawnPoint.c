@@ -125,12 +125,15 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		vector pos = m_TargetEntity.GetOrigin();
 		UpdateSpawnPosBroadcast(pos);
 		Rpc(UpdateSpawnPosBroadcast, pos);
+		SetOrigin(pos);
+		Replication.BumpMe();
 	}
 
 	[RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
 	protected void UpdateSpawnPosBroadcast(vector pos)
 	{
 		SetOrigin(pos);
+		Replication.BumpMe();
 	}
 
 	override void GetPositionAndRotation(out vector pos, out vector rot)
