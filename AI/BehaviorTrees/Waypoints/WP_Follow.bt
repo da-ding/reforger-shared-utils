@@ -1,0 +1,154 @@
+BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
+ Name "AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+ Nodes {
+  RootNode Root {
+   Name "Root"
+   EditorPos 346.095 -356.571
+   Nodes {
+    Parallel Parallel {
+     Name "Parallel"
+     EditorPos 323.667 -202
+     Nodes {
+      Sequence Sequence {
+       Name "Sequence"
+       EditorPos 91.429 84.143
+       Nodes {
+        SCR_AIGetPriorityFromWaypoint "SCR_AI Get Priority From Waypoint" {
+         Name "SCR_AI Get Priority From Waypoint"
+         EditorPos -1173 422.75
+         OutPorts {
+          SingleOutputPortContainer SingleOutputPortContainer {
+           Port 3
+           PortName "IsPriority"
+          }
+         }
+        }
+        AITaskGetWaypoint "Get Waypoint" {
+         Name "Get Waypoint"
+         EditorPos -807.727 419.091
+         CompletionRadius 5
+        }
+        SCR_AIGetEntityFromWaypoint "SCR_AI Get Entity From Waypoint" {
+         Name "SCR_AI Get Entity From Waypoint"
+         EditorPos -550 428
+         OutPorts {
+          SingleOutputPortContainer SingleOutputPortContainer {
+           Port 1
+           PortName "Entity"
+          }
+         }
+        }
+        SCR_AISendGoalMessage "SCR_AI Send Goal Message" {
+         Name "SCR_AI Send Goal Message"
+         EditorPos 342.317 435.075
+         InPorts {
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "Receiver"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "StringIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port 2
+           PortName "EntityIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "IntegerIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "VectorIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "BoolIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port 4
+           PortName "FloatIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port -1
+           PortName "TypenameIn"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
+           Port 0
+           PortName "Prioritize"
+          }
+         }
+         m_string "Movin to waypoint"
+         m_messageType FOLLOW
+         m_bIsWaypointRelated 1
+        }
+        AITaskGroupSetMovementSpeed "Group Set Movement Speed" {
+         Name "Group Set Movement Speed"
+         EditorPos 647.5 463.167
+         "Movement speed" RUN
+        }
+        AITaskReturnState "Return State" {
+         Name "Return State"
+         EditorPos 1218.511 478.119
+         Result RUNNING
+        }
+       }
+      }
+      SCR_AIAbortFollowWaypoint "SCR_AI Abort Follow Waypoint" {
+       Name "SCR_AI Abort Follow Waypoint"
+       EditorPos 479.667 -2
+      }
+     }
+     UseChildResult 0
+    }
+   }
+  }
+ }
+ Variables {
+  Variable waypointEntity {
+   VariableName "waypointEntity"
+   VariableTypeName "IEntity"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+  Variable isPriority {
+   VariableName "isPriority"
+   VariableTypeName "bool"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+  Variable completionDistance {
+   VariableName "completionDistance"
+   VariableTypeName "float"
+   VariableExposedInput 0
+   VariableExposedOutput 0
+  }
+ }
+ VariablesRefs {
+  VariableReference isPriority {
+   VariableType 1
+   EditorPos 144.143 778.714
+  }
+  VariableReference waypointEntity {
+   VariableType 0
+   EditorPos -245.321 663.607
+  }
+  VariableReference waypointEntity {
+   VariableType 0
+   EditorPos 13.393 586.964
+  }
+  VariableReference isPriority {
+   VariableType 1
+   EditorPos -741.5 680
+  }
+  VariableReference completionDistance {
+   VariableType 2
+   EditorPos 28 682
+  }
+  VariableReference completionDistance {
+   VariableType 2
+   EditorPos -526 667
+  }
+ }
+}
