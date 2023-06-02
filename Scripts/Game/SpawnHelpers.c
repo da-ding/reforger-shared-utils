@@ -1,6 +1,15 @@
 class SpawnHelpers {
-	static ref RandomGenerator RNG = new RandomGenerator();
+	static ref RandomGenerator RNG;
 
+	private static void InitRNG()
+	{
+		if (!RNG)
+		{
+			RNG = new RandomGenerator();
+			RNG.SetSeed(Math.Randomize(-1));
+		}
+	}
+		
 	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector yawPitchRoll = "0 0 0", IEntity parent = null)
 	{
 		if (!resource)
@@ -48,6 +57,7 @@ class SpawnHelpers {
 
 	static IEntity SpawnRandomInRadius(Resource resource, IEntity target, float radius, bool parent = false)
 	{
+		InitRNG();
 		if (!parent) return SpawnRandomInRadius(resource, target.GetOrigin(), radius);
 
 		vector origin = "0 0 0";
@@ -64,6 +74,7 @@ class SpawnHelpers {
 
 	static IEntity SpawnRandomInRadius(Resource resource, vector spawnOrigin, float radius)
 	{
+		InitRNG();
 		vector spawnPos = RNG.GenerateRandomPointInRadius(0, radius, spawnOrigin);
 		vector yawPitchRoll = "1 0 0" * RNG.RandFloatXY(-180, 180);
 
