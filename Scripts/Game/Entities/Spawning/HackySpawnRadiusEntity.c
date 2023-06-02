@@ -5,6 +5,7 @@ class DAD_SpawnRadiusEntityClass: ScriptedGameTriggerEntityClass
 
 class DAD_SpawnRadiusEntity: ScriptedGameTriggerEntity
 {
+
 	static ref RandomGenerator RNG = new RandomGenerator();
 
 	protected ref array<IEntity> m_Entities;

@@ -14,7 +14,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	[Attribute(desc: "Spawn point visualization. Original 'Info' attribute will be ignored.", category: "Entity Spawn Point")]
 	protected ref SCR_UIInfo m_EntityInfo;
 
-	/* [RplProp(onRplName: "OnSetEntityID")] */
+	//[RplProp(/*onRplName: "OnSetEntityID"*/)] 
 	protected RplId m_EntityID;
 
 	protected IEntity m_TargetEntity;

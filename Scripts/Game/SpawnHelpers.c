@@ -7,7 +7,7 @@ class SpawnHelpers {
 		{
 			RNG = new RandomGenerator();
 			RNG.SetSeed(Math.Randomize(-1));
-		}
+		} 
 	}
 		
 	static IEntity SpawnEntity(Resource resource, vector spawnPos, vector yawPitchRoll = "0 0 0", IEntity parent = null)

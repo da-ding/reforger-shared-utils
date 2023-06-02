@@ -24,7 +24,7 @@ class DAD_FactionControlTriggerEntity: DAD_BaseTriggerEntity
 		foreach (Faction f : factions)
 		{
 			m_mFactionCounts.Insert(f, 0);
-		} 
+		}
 	}
 
 	/*!
