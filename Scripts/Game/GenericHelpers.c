@@ -1,4 +1,4 @@
-class GenericHelpers
+class Helpers
 {
 	static void SnapToTerrain(IEntity entity)
 	{
@@ -46,3 +46,6 @@ class GenericHelpers
 		return rplC.GetEntity();
 	}
 }
+
+
+class GenericHelpers : Helpers {}
