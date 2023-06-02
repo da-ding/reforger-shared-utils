@@ -45,6 +45,34 @@ class Helpers
 		if (!rplC) return null;
 		return rplC.GetEntity();
 	}
+
+	static RplId GetRplId(IEntity entity)
+	{
+		RplComponent rplC = RplComponent.Cast(entity.FindComponent(RplComponent));
+		if (!rplC) return null;
+		return rplC.Id();
+	}
+
+	static bool addAiToPlayerGroup(IEntity player, IEntity ai)
+	{
+		int playerId = GetGame().GetPlayerManager().GetPlayerIdFromControlledEntity(player);
+
+		if (!playerId)
+		{
+			Print("DAD_JoinGroupAction: No player ID!", LogLevel.WARNING);
+			return false;
+		}
+
+		SCR_AIGroup playerGroup = SCR_GroupsManagerComponent.GetInstance().GetPlayerGroup(playerId);
+
+		if (!playerGroup)
+		{
+			Print("DAD_JoinGroupAction: No player group!", LogLevel.WARNING);
+			return false;
+		}
+
+		return playerGroup.AddAIEntityToGroup(ai, 1);
+	}
 }
 
 
