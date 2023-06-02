@@ -38,7 +38,7 @@ class Helpers
 		}
 		return null;
 	}
-	
+
 	static IEntity FindEntity(RplId id)
 	{
 		RplComponent rplC = RplComponent.Cast(Replication.FindItem(id));

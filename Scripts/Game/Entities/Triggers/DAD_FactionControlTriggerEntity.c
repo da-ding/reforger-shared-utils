@@ -20,7 +20,7 @@ class DAD_FactionControlTriggerEntity: DAD_BaseTriggerEntity
 		FactionManager factionManager = GetGame().GetFactionManager();
 		array<Faction> factions = new array<Faction>();
 		factionManager.GetFactionsList(factions);
-		
+
 		foreach (Faction f : factions)
 		{
 			m_mFactionCounts.Insert(f, 0);
