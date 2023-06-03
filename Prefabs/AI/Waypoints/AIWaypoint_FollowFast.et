@@ -2,10 +2,9 @@ SCR_EntityWaypoint {
  ID "9EB76065908D95D5"
  Type "FollowFast"
  Title "Follow, but at a decent speed, please?"
- AIBehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt"
- AIBehaviorTreeMoveTo "{A3755C1F88DED8D6}AI/BehaviorTrees/Waypoints/WP_Move.bt"
+ AIBehaviorTree "{4739EA8322EA0FCF}AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+ AIBehaviorTreeMoveTo "{EDE4E03C9870DE2E}AI/BehaviorTrees/Waypoints/WP_Blank.bt"
  Autocomplete 0
  CompletionRadius 5
  CompletionType All
- m_bIsPriority 0
 }

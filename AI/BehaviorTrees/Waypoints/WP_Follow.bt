@@ -1,5 +1,5 @@
 BehaviorTree {
- Name "Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+ Name "AI/BehaviorTrees/Waypoints/WP_Follow.bt"
  Nodes {
   RootNode Root {
    Name "Root"
