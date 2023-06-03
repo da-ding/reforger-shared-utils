@@ -1,5 +1,5 @@
-BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
- Name "AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+BehaviorTree {
+ Name "Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follow.bt"
  Nodes {
   RootNode Root {
    Name "Root"
@@ -11,7 +11,7 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
      Nodes {
       Sequence Sequence {
        Name "Sequence"
-       EditorPos 91.429 84.143
+       EditorPos 131.429 144.143
        Nodes {
         SCR_AIGetPriorityFromWaypoint "SCR_AI Get Priority From Waypoint" {
          Name "SCR_AI Get Priority From Waypoint"
@@ -19,7 +19,7 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
          OutPorts {
           SingleOutputPortContainer SingleOutputPortContainer {
            Port 3
-           PortName "IsPriority"
+           PortName "PriorityLevel"
           }
          }
         }
@@ -38,66 +38,58 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
           }
          }
         }
-        SCR_AISendGoalMessage "SCR_AI Send Goal Message" {
-         Name "SCR_AI Send Goal Message"
-         EditorPos 342.317 435.075
+        SCR_AISendGoalMessage_Follow "SCR_AI Send Goal Message_ Follow" {
+         Name "SCR_AI Send Goal Message_ Follow"
+         EditorPos 293.25 456
          InPorts {
           SingleInputPortContainer SingleInputPortContainer {
            Port -1
            PortName "Receiver"
           }
           SingleInputPortContainer SingleInputPortContainer {
+           Port 0
+           PortName "PriorityLevel"
+          }
+          SingleInputPortContainer SingleInputPortContainer {
            Port -1
-           PortName "StringIn"
+           PortName "IsWaypointRelated"
           }
           SingleInputPortContainer SingleInputPortContainer {
            Port 2
-           PortName "EntityIn"
+           PortName "FollowEntity"
           }
           SingleInputPortContainer SingleInputPortContainer {
            Port -1
-           PortName "IntegerIn"
+           PortName "MovePosition"
           }
           SingleInputPortContainer SingleInputPortContainer {
            Port -1
-           PortName "VectorIn"
-          }
-          SingleInputPortContainer SingleInputPortContainer {
-           Port -1
-           PortName "BoolIn"
+           PortName "UseVehicles"
           }
           SingleInputPortContainer SingleInputPortContainer {
            Port 4
-           PortName "FloatIn"
-          }
-          SingleInputPortContainer SingleInputPortContainer {
-           Port -1
-           PortName "TypenameIn"
-          }
-          SingleInputPortContainer SingleInputPortContainer {
-           Port 0
-           PortName "Prioritize"
+           PortName "Distance"
           }
          }
-         m_string "Movin to waypoint"
-         m_messageType FOLLOW
+         m_sText "WP_Follow"
          m_bIsWaypointRelated 1
         }
         AITaskGroupSetMovementSpeed "Group Set Movement Speed" {
          Name "Group Set Movement Speed"
-         EditorPos 647.5 463.167
+         EditorPos 657.5 490.786
          "Movement speed" RUN
         }
         AITaskReturnState "Return State" {
          Name "Return State"
-         EditorPos 1218.511 478.119
+         EditorPos 1013.749 473.357
          Result RUNNING
         }
        }
       }
-      SCR_AIAbortFollowWaypoint "SCR_AI Abort Follow Waypoint" {
-       Name "SCR_AI Abort Follow Waypoint"
+      SCR_AIAbortWaypoint "SCR_AI Abort Waypoint" {
+       Name "SCR_AI Abort Waypoint"
        EditorPos 479.667 -2
+       m_bLeaveTurret 0
       }
      }
      UseChildResult 0
@@ -112,9 +104,9 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
    VariableExposedInput 0
    VariableExposedOutput 0
   }
-  Variable isPriority {
-   VariableName "isPriority"
-   VariableTypeName "bool"
+  Variable priorityLevel {
+   VariableName "priorityLevel"
+   VariableTypeName "float"
    VariableExposedInput 0
    VariableExposedOutput 0
   }
@@ -126,9 +118,9 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
   }
  }
  VariablesRefs {
-  VariableReference isPriority {
+  VariableReference priorityLevel {
    VariableType 1
-   EditorPos 144.143 778.714
+   EditorPos 47.143 497.714
   }
   VariableReference waypointEntity {
    VariableType 0
@@ -138,13 +130,13 @@ BehaviorTree "{C8508A9BBD1D8F65}AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
    VariableType 0
    EditorPos 13.393 586.964
   }
-  VariableReference isPriority {
+  VariableReference priorityLevel {
    VariableType 1
    EditorPos -741.5 680
   }
   VariableReference completionDistance {
    VariableType 2
-   EditorPos 28 682
+   EditorPos 29 682
   }
   VariableReference completionDistance {
    VariableType 2
