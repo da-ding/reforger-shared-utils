@@ -21,7 +21,7 @@ class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 
 	void OnGroupEmpty()
 	{
-		OnEntityDeleted(GetEntityID(), m_TargetEntity);
+		OnEntityDeleted(m_TargetEntity);
 	}
 
 	override void EOnPlayerSpawn(IEntity entity)

@@ -12,12 +12,9 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	protected float m_fUpdateInterval;
 
 	[Attribute(desc: "Spawn point visualization. Original 'Info' attribute will be ignored.", category: "Entity Spawn Point")]
-	protected ref SCR_UIInfo m_EntityInfo;
+	protected ref SCR_UIInfo m_TargetEntityInfo;
 
-	//[RplProp(/*onRplName: "OnSetEntityID"*/)]
-	protected RplId m_EntityID;
-
-	protected IEntity m_TargetEntity;
+	protected IEntity m_TargetEntity = null;
 
 	protected bool m_bActivated = true;
 
@@ -32,68 +29,37 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		return super.GetFactionKey();
 	}
 
-	/*!
-	Assign entity ID to this respawn point.
-	The Spawn will then activate and follow the position of the entity
-	\param entityID Target entity ID
-	*/
-	void SetEntityID(RplId entityID)
-	{
-		if (entityID == m_EntityID || !Replication.IsServer())
-			return;
-
-		//--- Set and broadcast new entity ID
-		m_EntityID = entityID;
-		OnSetEntityID();
-		Replication.BumpMe();
-
-		RplComponent rplC = RplComponent.Cast(Replication.FindItem(m_EntityID));
-		IEntity entity = rplC.GetEntity();
-		//IEntity entity = GetGame().GetWorld().FindEntityByName(m_EntityID);
-		// TODO: Set listener to auto-update when entity is deleted from world
-		if (entity)
-			OnEntitySpawn(m_EntityID, entity);
-		else
-			OnEntityDeleted(m_EntityID, null);
-	}
-
 	void SetEntity(IEntity entity)
 	{
-		RplComponent rplC = RplComponent.Cast(entity.FindComponent(RplComponent));
-		RplId id = rplC.Id();
-		SetEntityID(id);
+		if (entity == m_TargetEntity || !Replication.IsServer())
+			return;
+
+		m_TargetEntity = entity;
+		OnEntitySpawn(entity);
 	}
 
-	/*!
-	Get ID of the player this spawn point is assigned to.
-	\return Target entity ID
-	*/
-	RplId GetEntityID()
+	protected void OnSetentity()
 	{
-		return m_EntityID;
+		LocalizedString name = m_TargetEntity.ToString();
+		if (!m_TargetEntityInfo)
+			m_TargetEntityInfo = SCR_UIInfo.CreateInfo(name);
+		LinkInfo(m_TargetEntityInfo);
 	}
 
-	protected void OnSetEntityID()
+	// When the entity attached to the spawn point is spawned
+	protected void OnEntitySpawn(IEntity entity)
 	{
-		LocalizedString name = m_EntityID.ToString();
-		//--- Link player info
-		if (!m_EntityInfo)
-			m_EntityInfo = SCR_UIInfo.CreateInfo(name);
-		LinkInfo(m_EntityInfo);
-	}
-
-	protected void OnEntitySpawn(RplId entityID, IEntity entity)
-	{
-		if (entityID != m_EntityID)
+		if (entity != m_TargetEntity)
 			return;
 
 		m_TargetEntity = entity;
 		ActivateSpawnPoint();
 	}
 
-	protected void OnEntityDeleted(RplId entityID, IEntity entity)
+	// When the entity attached to the spawn point is deleted
+	protected void OnEntityDeleted(IEntity entity)
 	{
-		if (entityID != m_EntityID)
+		if (entity != m_TargetEntity)
 			return;
 
 		DeactivateSpawnPoint();
@@ -104,7 +70,6 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 	{
 		m_bActivated = true;
 		//--- Periodically refresh spawn's position
-		//--- Clients cannot access another player's entity directly, because it may not be streamed for them
 		ClearFlags(EntityFlags.STATIC, false);
 		GetGame().GetCallqueue().CallLater(UpdateSpawnPos, m_fUpdateInterval * 1000, true);
 	}
@@ -123,10 +88,11 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 			return;
 
 		vector pos = m_TargetEntity.GetOrigin();
+		if (GetOrigin() == pos) return;
+
+		// I don't know why this has multiple update spawn requests, but I suspect it's redundant in order to improve reliability.
 		UpdateSpawnPosBroadcast(pos);
 		Rpc(UpdateSpawnPosBroadcast, pos);
-		SetOrigin(pos);
-		Replication.BumpMe();
 	}
 
 	[RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
