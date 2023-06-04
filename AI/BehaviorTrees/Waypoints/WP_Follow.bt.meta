@@ -1,5 +1,5 @@
 MetaFileClass {
- Name "{4739EA8322EA0FCF}AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+ Name "{4739EA8322EA0FCF}Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follow.bt"
  Configurations {
   BehaviorTreeResourceClass PC {
   }

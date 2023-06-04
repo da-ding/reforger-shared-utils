@@ -1,4 +1,4 @@
-BehaviorTree {
+BehaviorTree "{4739EA8322EA0FCF}Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follow.bt" {
  Name "AI/BehaviorTrees/Waypoints/WP_Follow.bt"
  Nodes {
   RootNode Root {
@@ -38,9 +38,14 @@ BehaviorTree {
           }
          }
         }
+        AITaskGroupSetMovementSpeed "Group Set Movement Speed" {
+         Name "Group Set Movement Speed"
+         EditorPos -131 436.643
+         "Movement speed" RUN
+        }
         SCR_AISendGoalMessage_Follow "SCR_AI Send Goal Message_ Follow" {
          Name "SCR_AI Send Goal Message_ Follow"
-         EditorPos 293.25 456
+         EditorPos 472.536 454.69
          InPorts {
           SingleInputPortContainer SingleInputPortContainer {
            Port -1
@@ -74,14 +79,9 @@ BehaviorTree {
          m_sText "WP_Follow"
          m_bIsWaypointRelated 1
         }
-        AITaskGroupSetMovementSpeed "Group Set Movement Speed" {
-         Name "Group Set Movement Speed"
-         EditorPos 657.5 490.786
-         "Movement speed" RUN
-        }
         AITaskReturnState "Return State" {
          Name "Return State"
-         EditorPos 1013.749 473.357
+         EditorPos 871.416 457.523
          Result RUNNING
         }
        }
@@ -120,7 +120,7 @@ BehaviorTree {
  VariablesRefs {
   VariableReference priorityLevel {
    VariableType 1
-   EditorPos 47.143 497.714
+   EditorPos 235 509.738
   }
   VariableReference waypointEntity {
    VariableType 0
@@ -128,7 +128,7 @@ BehaviorTree {
   }
   VariableReference waypointEntity {
    VariableType 0
-   EditorPos 13.393 586.964
+   EditorPos 201.25 598.988
   }
   VariableReference priorityLevel {
    VariableType 1
@@ -136,7 +136,7 @@ BehaviorTree {
   }
   VariableReference completionDistance {
    VariableType 2
-   EditorPos 29 682
+   EditorPos 216.857 694.024
   }
   VariableReference completionDistance {
    VariableType 2

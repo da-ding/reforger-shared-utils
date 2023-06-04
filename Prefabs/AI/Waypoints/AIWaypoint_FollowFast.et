@@ -1,10 +1,17 @@
 SCR_EntityWaypoint {
  ID "9EB76065908D95D5"
+ components {
+  SCR_EditableWaypointComponent "{5D86CC5FDD621FA2}" {
+  }
+  RplComponent "{5D86CC53C788FABC}" {
+  }
+ }
+ coords 0 0 0
  Type "FollowFast"
  Title "Follow, but at a decent speed, please?"
- AIBehaviorTree "{4739EA8322EA0FCF}AI/BehaviorTrees/Waypoints/WP_Follow.bt"
+ AIBehaviorTree "{4739EA8322EA0FCF}Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follow.bt"
  AIBehaviorTreeMoveTo "{EDE4E03C9870DE2E}AI/BehaviorTrees/Waypoints/WP_Blank.bt"
- Autocomplete 0
  CompletionRadius 5
+ Autocomplete 0
  CompletionType All
 }
