@@ -17,7 +17,9 @@ class DAD_FactionControlTriggerEntity: DAD_BaseTriggerEntity
 
 	override protected void EOnInit(IEntity owner)
 	{
+		super.EOnInit(owner);
 		FactionManager factionManager = GetGame().GetFactionManager();
+		if (!factionManager) return;
 		array<Faction> factions = new array<Faction>();
 		factionManager.GetFactionsList(factions);
 
