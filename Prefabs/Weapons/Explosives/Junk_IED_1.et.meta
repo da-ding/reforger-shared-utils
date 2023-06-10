@@ -1,0 +1,15 @@
+MetaFileClass {
+ Name "{9BAAEAD54261AC03}Prefabs/Props/Garbage/Generic/Junk_01/Junk_IED_1.et"
+ Configurations {
+  EntityTemplateResourceClass PC {
+  }
+  EntityTemplateResourceClass XBOX_ONE : PC {
+  }
+  EntityTemplateResourceClass XBOX_SERIES : PC {
+  }
+  EntityTemplateResourceClass PS4 : PC {
+  }
+  EntityTemplateResourceClass HEADLESS : PC {
+  }
+ }
+}
