@@ -3,18 +3,15 @@ class DAD_AIGroupProxyInfoComponentClass: SCR_AIInfoBaseComponentClass
 {
 };
 
-enum DAD_EGroupActionState
+enum DAD_E3GroupActionState: EGroupState
 {
-	NONE = 0,
-	FOLLOWING,
-	MOVING,
 	LAST,
 };
 
 //------------------------------------------------------------------------------------------------
 class DAD_AIGroupProxyInfoComponent : SCR_AIInfoBaseComponent
 {
-	private DAD_EGroupActionState m_DAD_EGroupActionState;
+	private EGroupState m_EGroupState;
 
 	protected ref ScriptInvoker Event_OnActionStateChanged = new ScriptInvoker;
 
@@ -23,16 +20,28 @@ class DAD_AIGroupProxyInfoComponent : SCR_AIInfoBaseComponent
 	{
 		super.OnPostInit(owner);
 		SetEventMask(owner, EntityEvent.INIT);
+
+		if (!Replication.IsServer())
+			return;
+
+		SCR_ChimeraCharacter char = SCR_ChimeraCharacter.Cast(owner);
+
+		AIControlComponent controlComp = AIControlComponent.Cast(owner.FindComponent(AIControlComponent));
+		//m_AI = controlComp.GetControlAIAgent().GetParentGroup();
+	}
+
+	void UpdateInfo(AIGroup ai)
+	{
 	}
 
 	//------------------------------------------------------------------------------------------------
-	void SetGroupActionState(DAD_EGroupActionState currActionState) // This property just contains info, it doesn't change group behaviour!
+	void SetGroupActionState(EGroupState currActionState) // This property just contains info, it doesn't change group behaviour!
 	{
 		#ifdef AI_DEBUG
-		AddDebugMessage(string.Format("SetGroupActionState: %1", typename.EnumToString(DAD_EGroupActionState, currActionState)), msgType:EAIDebugMsgType.INFO);
+		AddDebugMessage(string.Format("SetGroupActionState: %1", typename.EnumToString(EGroupState, currActionState)), msgType:EAIDebugMsgType.INFO);
 		#endif
 
-		if (currActionState == m_DAD_EGroupActionState)
+		if (currActionState == m_EGroupState)
 			return;
 
 		if (!Replication.IsServer())
@@ -43,16 +52,16 @@ class DAD_AIGroupProxyInfoComponent : SCR_AIInfoBaseComponent
 	}
 
 	[RplRpc(RplChannel.Reliable, RplRcver.Broadcast)]
-	protected void RplSetGroupActionState(DAD_EGroupActionState currActionState)
+	protected void RplSetGroupActionState(EGroupState currActionState)
 	{
-		m_DAD_EGroupActionState = currActionState;
+		m_EGroupState = currActionState;
 		Event_OnActionStateChanged.Invoke(currActionState);
 	}
 
 	//------------------------------------------------------------------------------------------------
-	DAD_EGroupActionState GetGroupActionState()
+	EGroupState GetGroupActionState()
 	{
-		return m_DAD_EGroupActionState;
+		return m_EGroupState;
 	}
 
 	//------------------------------------------------------------------------------------------------
@@ -64,16 +73,16 @@ class DAD_AIGroupProxyInfoComponent : SCR_AIInfoBaseComponent
 	//======================================== RPL ========================================\\
 	override bool RplSave(ScriptBitWriter writer)
     {
-        writer.WriteIntRange(m_DAD_EGroupActionState, 0, DAD_EGroupActionState.LAST-1);
+        writer.WriteInt(m_EGroupState);
 
         return true;
     }
 
     override bool RplLoad(ScriptBitReader reader)
     {
-		DAD_EGroupActionState groupActionState;
+		EGroupState groupActionState;
 
-        reader.ReadIntRange(groupActionState, 0, DAD_EGroupActionState.LAST-1);
+        reader.ReadInt(groupActionState);
 
 		RplSetGroupActionState(groupActionState);
 
