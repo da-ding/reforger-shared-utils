@@ -78,6 +78,7 @@ BehaviorTree "{4739EA8322EA0FCF}Shared Utils/AI/BehaviorTrees/Waypoints/WP_Follo
          }
          m_sText "WP_Follow"
          m_bIsWaypointRelated 1
+         m_bUseVehicles 1
         }
         AITaskReturnState "Return State" {
          Name "Return State"
