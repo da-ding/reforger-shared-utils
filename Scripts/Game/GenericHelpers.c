@@ -24,7 +24,7 @@ class Helpers
 
 		auto gameMode = SCR_BaseGameMode.Cast(GetGame().GetGameMode());
 		gameMode.EndGameMode(
-				SCR_GameModeEndData.CreateSimple(SCR_GameModeEndData.ENDREASON_EDITOR_FACTION_VICTORY, -1, factionIndex)
+				SCR_GameModeEndData.CreateSimple(EGameOverTypes.EDITOR_FACTION_VICTORY, -1, factionIndex)
 		);
 	}
 
@@ -71,7 +71,7 @@ class Helpers
 			return false;
 		}
 
-		return playerGroup.AddAIEntityToGroup(ai, 1);
+		return playerGroup.AddAIEntityToGroup(ai);
 	}
 }
 

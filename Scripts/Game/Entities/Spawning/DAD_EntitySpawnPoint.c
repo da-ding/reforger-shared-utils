@@ -118,7 +118,7 @@ class DAD_EntitySpawnPoint: SCR_SpawnPoint
 		}
 	}
 
-	override void EOnPlayerSpawn(IEntity entity)
+	override void OnFinalizeSpawnDone_S(SCR_SpawnRequestComponent requestComponent, SCR_SpawnData data, IEntity entity)
 	{
 		//--- If spawn point target is sitting in a vehicle, move spawned player inside as well
 		IEntity vehicle = GenericHelpers.GetVehicle(m_TargetEntity);

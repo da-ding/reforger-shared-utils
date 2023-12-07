@@ -24,9 +24,9 @@ class DAD_GroupSpawnPoint : DAD_EntitySpawnPoint
 		OnEntityDeleted(m_TargetEntity);
 	}
 
-	override void EOnPlayerSpawn(IEntity entity)
+	override void OnFinalizeSpawnDone_S(SCR_SpawnRequestComponent requestComponent, SCR_SpawnData data, IEntity entity)
 	{
-		super.EOnPlayerSpawn(entity);
+		super.OnFinalizeSpawnDone_S(requestComponent, data, entity);
 		SCR_AIGroup group = SCR_AIGroup.Cast(GetTargetEntity());
 		if (!group) return;
 
